@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: rescatta-backend
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB      # tamaño máximo por foto
+      max-request-size: 30MB   # suficiente para 5 fotos + campos del formulario
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: America/Lima
+
+server:
+  port: 8081
+
+# Carpeta donde se guardan las fotos subidas (reportes y mascotas).
+# Se sirve públicamente bajo /uploads/** (ver WebMvcConfig).
+rescatta:
+  storage:
+    base-path: ./uploads
+    public-url-prefix: /uploads
+  reports:
+    max-photos: 5
+  catalog:
+    default-search-radius-km: 10
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/rescatta?useSSL=false&serverTimezone=America/Lima&createDatabaseIfNotExist=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Root2026!   # cambia esto por tu contraseña real de MySQL Workbench
+  jpa:
+    hibernate:
+      ddl-auto: update   # Hibernate crea/actualiza las tablas solo, no necesitas escribir el schema a mano
+    defer-datasource-initialization: true   # crea las tablas ANTES de correr data.sql (si no, data.sql falla)
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  sql:
+    init:
+      mode: always   # ejecuta data.sql al arrancar (seed de razas, organización y mascotas demo)
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/rescatta?useSSL=false&serverTimezone=America/Lima}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME:rescatta}
+    password: ${DB_PASSWORD:rescatta}
+  jpa:
+    hibernate:
+      ddl-auto: validate   # en prod las migraciones las maneja Flyway/Liquibase (TODO)
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
