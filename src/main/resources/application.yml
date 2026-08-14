@@ -53,7 +53,7 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
   sql:
     init:
-      mode: never   # ejecuta data.sql al arrancar (seed de razas, organización y mascotas demo)
+      mode: always   # ejecuta data.sql al arrancar (seed de razas, organización y mascotas demo)
 
 ---
 ##spring:
