@@ -65,18 +65,22 @@ VALUES ('Rocky', 'PERRO', 3, 'MACHO', 'ADULTO', '4 años', 'GRANDE', 32.0,
         3, 'San Juan de Lurigancho, Lima', -11.9998, -77.0089, 'Gratis', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Comportamiento (tags) de cada mascota
-INSERT INTO pet_temperament_tags (pet_id, tag) VALUES (1, 'SOCIABLE');
-INSERT INTO pet_temperament_tags (pet_id, tag) VALUES (1, 'ACTIVO');
-INSERT INTO pet_temperament_tags (pet_id, tag) VALUES (1, 'APTO_NINOS');
-INSERT INTO pet_temperament_tags (pet_id, tag) VALUES (1, 'APTO_PERROS');
+-- Mascota 1
+INSERT INTO pet_temperament_tags (pet_id, tag, tag_order) VALUES (1, 'SOCIABLE', 0);
+INSERT INTO pet_temperament_tags (pet_id, tag, tag_order) VALUES (1, 'ACTIVO', 1);
+INSERT INTO pet_temperament_tags (pet_id, tag, tag_order) VALUES (1, 'APTO_NINOS', 2);
+INSERT INTO pet_temperament_tags (pet_id, tag, tag_order) VALUES (1, 'APTO_PERROS', 3);
 
-INSERT INTO pet_temperament_tags (pet_id, tag) VALUES (2, 'TIMIDO');
+-- Mascota 2
+INSERT INTO pet_temperament_tags (pet_id, tag, tag_order) VALUES (2, 'TIMIDO', 0);
 
-INSERT INTO pet_temperament_tags (pet_id, tag) VALUES (3, 'SOCIABLE');
-INSERT INTO pet_temperament_tags (pet_id, tag) VALUES (3, 'ACTIVO');
+-- Mascota 3
+INSERT INTO pet_temperament_tags (pet_id, tag, tag_order) VALUES (3, 'SOCIABLE', 0);
+INSERT INTO pet_temperament_tags (pet_id, tag, tag_order) VALUES (3, 'ACTIVO', 1);
 
-INSERT INTO pet_temperament_tags (pet_id, tag) VALUES (4, 'PROTECTOR');
-INSERT INTO pet_temperament_tags (pet_id, tag) VALUES (4, 'TRANQUILO');
+-- Mascota 4
+INSERT INTO pet_temperament_tags (pet_id, tag, tag_order) VALUES (4, 'PROTECTOR', 0);
+INSERT INTO pet_temperament_tags (pet_id, tag, tag_order) VALUES (4, 'TRANQUILO', 1);
 
 -- Fotos placeholder (reemplazar por URLs reales cuando se conecte el storage definitivo)
 INSERT INTO pet_photos (pet_id, url, photo_order) VALUES (1, '/uploads/seed/luna_1.jpg', 0);
