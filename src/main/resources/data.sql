@@ -24,7 +24,7 @@ INSERT IGNORE INTO organizations (name, verified, district) VALUES ('Rescate Mir
 INSERT IGNORE INTO organizations (name, verified, district) VALUES ('Patitas Callejeras SJL', false, 'San Juan de Lurigancho, Lima');
 
 -- Mascotas de ejemplo en el catálogo (coordenadas reales de Lima, para probar "cerca de mí")
-INSERT IGNORE INTO pets (name, species, breed_id, sex, age_group, age_description, size, weight_kg,
+/*INSERT IGNORE INTO pets (name, species, breed_id, sex, age_group, age_description, size, weight_kg,
                    adoption_status, is_vaccinated, is_sterilized, is_dewormed,
                    health_description, description, organization_id, district,
                    latitude, longitude, adoption_fee_text, created_at, updated_at)
@@ -103,3 +103,4 @@ VALUES ('GATO', null, null, 'SANO', 'Gato blanco y gris escondido bajo un auto e
 
 INSERT IGNORE INTO report_photos (report_id, url, photo_order) VALUES (1, '/uploads/seed/reporte_1.jpg', 0);
 INSERT IGNORE INTO report_photos (report_id, url, photo_order) VALUES (2, '/uploads/seed/reporte_2.jpg', 0);
+*/
