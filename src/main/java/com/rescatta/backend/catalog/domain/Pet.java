@@ -87,8 +87,9 @@ public class Pet {
     @CollectionTable(name = "pet_temperament_tags", joinColumns = @JoinColumn(name = "pet_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "tag", length = 20)
+    @OrderColumn(name = "tag_order") // <--- ¡AÑADE ESTA LÍNEA!
     @Builder.Default
-    private Set<TemperamentTag> temperamentTags = new HashSet<>();
+    private List<TemperamentTag> temperamentTags = new ArrayList<>(); // <-- Cambiado Set por List
 
     /** "Descripción de su nueva salud" — cómo llegó y cómo evolucionó desde el rescate. */
     @Column(name = "health_description", length = 1000)
