@@ -38,7 +38,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/rescatta?useSSL=false&serverTimezone=America/Lima&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/rescatta?useSSL=false&serverTimezone=America/Lima&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: Root2026!   # cambia esto por tu contraseña real de MySQL Workbench
@@ -53,7 +53,7 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
   sql:
     init:
-      mode: never   # ejecuta data.sql al arrancar (seed de razas, organización y mascotas demo)
+      mode: always   # ejecuta data.sql al arrancar (seed de razas, organización y mascotas demo)
 
 ---
 ##spring:
