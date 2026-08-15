@@ -56,20 +56,28 @@ spring:
       mode: always   # ejecuta data.sql al arrancar (seed de razas, organización y mascotas demo)
 
 ---
-##spring:
-#  config:
-#    activate:
-#      on-profile: prod
-#  datasource:
-#    url: ${DB_URL:jdbc:mysql://localhost:3306/rescatta?useSSL=false&serverTimezone=America/Lima}
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    username: ${DB_USERNAME:rescatta}
-#    password: ${DB_PASSWORD:rescatta}
-#  jpa:
-  #  hibernate:
- #     ddl-auto: validate   # en prod las migraciones las maneja Flyway/Liquibase (TODO)
-#    show-sql: false
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQLDialect
-#
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: ${DB_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+    show-sql: false
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  sql:
+    init:
+      mode: always
