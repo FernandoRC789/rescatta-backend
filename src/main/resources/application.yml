@@ -68,9 +68,12 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
+
+    defer-datasource-initialization: true
 
     show-sql: false
 
