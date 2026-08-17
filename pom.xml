@@ -75,6 +75,13 @@
             <version>2.6.0</version>
         </dependency>
 
+        <!-- Documentación interactiva de la API (Swagger UI en /swagger-ui.html) -->
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>9.7.0</version>
+        </dependency>
+
         <!-- Tests -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

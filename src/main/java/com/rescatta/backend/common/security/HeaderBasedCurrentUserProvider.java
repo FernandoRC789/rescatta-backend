@@ -26,7 +26,7 @@ import java.util.Optional;
  * {@link CurrentUserProvider}, así que el día que se reemplace esta clase, no hay que
  * tocar nada más.
  */
-@Component
+//@Component
 public class HeaderBasedCurrentUserProvider implements CurrentUserProvider {
 
     private static final String USER_UID_HEADER = "X-User-Uid";
