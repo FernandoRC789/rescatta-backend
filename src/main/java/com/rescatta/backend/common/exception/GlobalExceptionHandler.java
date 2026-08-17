@@ -54,12 +54,22 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("Una o más fotos superan el tamaño máximo permitido (10MB c/u)."));
     }
 
-    @ExceptionHandler(Exception.class)
+    /*@ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse("Ocurrió un error inesperado. Intenta nuevamente."));
-    }
+    }*/
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
 
+        ex.printStackTrace();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(
+                        "Error interno: " + ex.getClass().getSimpleName() + " - " + ex.getMessage()
+                ));
+    }
+    
     private ErrorResponse.FieldValidationError toFieldError(FieldError fieldError) {
         return new ErrorResponse.FieldValidationError(fieldError.getField(), fieldError.getDefaultMessage());
     }
