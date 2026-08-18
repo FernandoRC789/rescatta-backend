@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
                         "Error interno: " + ex.getClass().getSimpleName() + " - " + ex.getMessage()
                 ));
     }
-    
+
     private ErrorResponse.FieldValidationError toFieldError(FieldError fieldError) {
         return new ErrorResponse.FieldValidationError(fieldError.getField(), fieldError.getDefaultMessage());
     }

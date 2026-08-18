@@ -4,7 +4,10 @@ package com.rescatta.backend.shared.domain.enums;
 public enum ReportCondition {
     HERIDO,
     SANO,
-    CACHORRO,
     ATROPELLADO,
+    PERDIDO,
+    ABANDONADO,
+    ENFERMO,
+    REHABILITACION,
     OTROS
 }
