@@ -5,5 +5,5 @@ public enum AgeGroup {
     BEBE,
     CACHORRO,
     ADULTO,
-    ANCIANO
+    SENIOR
 }
