@@ -27,4 +27,13 @@ public final class ReportSpecifications {
     public static Specification<AnimalReport> reportedBy(String reporterUid) {
         return (root, query, cb) -> reporterUid == null ? null : cb.equal(root.get("reporterUid"), reporterUid);
     }
+
+    public static Specification<AnimalReport> assignedToOrganization(Long organizationId) {
+        return (root, query, cb) -> organizationId == null ? null : cb.equal(root.get("organization").get("id"), organizationId);
+    }
+
+    /** Casos disponibles para tomar: aún sin organización asignada. */
+    public static Specification<AnimalReport> unassigned() {
+        return (root, query, cb) -> cb.isNull(root.get("organization"));
+    }
 }

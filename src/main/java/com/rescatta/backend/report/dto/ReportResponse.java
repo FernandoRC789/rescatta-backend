@@ -20,7 +20,13 @@ public record ReportResponse(
         String address,
         ReportStatus status,
         boolean reporterCanStay,
+        String reporterUid,
         List<String> photoUrls,
+        Long organizationId,
+        String organizationName,
+        String rejectionReason,
+        String adminNotes,
+        Instant reviewedAt,
         Instant createdAt
 ) {
 }

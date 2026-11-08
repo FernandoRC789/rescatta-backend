@@ -82,6 +82,33 @@
             <version>9.7.0</version>
         </dependency>
 
+        <!-- Chat en tiempo real (WebSocket + STOMP) entre Ciudadano y Administrador -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <!-- Almacenamiento de imágenes en Cloudflare R2 (S3-compatible) -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>2.46.7</version>
+        </dependency>
+        <!-- Cliente HTTP explícito para evitar el conflicto de versiones de
+             httpclient5 entre AWS SDK, Firebase y Cloudinary. -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>url-connection-client</artifactId>
+            <version>2.46.7</version>
+        </dependency>
+
+        <!-- Almacenamiento de imágenes en Cloudinary (free tier, sin tarjeta) -->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http5</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
         <!-- Tests -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

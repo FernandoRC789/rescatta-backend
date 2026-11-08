@@ -15,6 +15,8 @@ public interface ReportMapper {
 
     @Mapping(target = "breedName", expression = "java(report.getBreed() != null ? report.getBreed().getName() : null)")
     @Mapping(target = "photoUrls", expression = "java(toOrderedUrls(report.getPhotos()))")
+    @Mapping(target = "organizationId", expression = "java(report.getOrganization() != null ? report.getOrganization().getId() : null)")
+    @Mapping(target = "organizationName", expression = "java(report.getOrganization() != null ? report.getOrganization().getName() : null)")
     ReportResponse toResponse(AnimalReport report);
 
     default ReportSummaryResponse toSummary(AnimalReport report) {

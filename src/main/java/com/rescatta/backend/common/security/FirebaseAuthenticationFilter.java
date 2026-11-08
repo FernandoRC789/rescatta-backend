@@ -10,6 +10,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Verifica el ID Token de Firebase enviado en {@code Authorization: Bearer <token>} y
+ * deja disponibles en la request el UID, email y nombre del usuario autenticado, tanto
+ * para ciudadanos (app iOS) como para administradores (panel web) — ambos usan Firebase
+ * Authentication, la diferencia de rol vive en la tabla {@code app_users}
+ * (ver {@code AppUserService}).
+ */
 public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -36,6 +43,8 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
                     FirebaseAuth.getInstance().verifyIdToken(idToken);
 
             request.setAttribute("firebaseUid", decodedToken.getUid());
+            request.setAttribute("firebaseEmail", decodedToken.getEmail());
+            request.setAttribute("firebaseName", decodedToken.getName());
 
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

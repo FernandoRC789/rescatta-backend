@@ -2,13 +2,21 @@ package com.rescatta.backend.common.storage;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstracción de almacenamiento de archivos. Hoy la implementación es en disco local
- * ({@link LocalFileStorageService}), pero cualquier controller/service que dependa de esta
- * interfaz no se entera si mañana cambia a Firebase Storage, S3, o Cloudinary — ese es
- * justamente el punto de aplicar el principio de inversión de dependencias aquí.
+ * Abstracción de almacenamiento de archivos.
+ *
+ * <p>Implementaciones disponibles:
+ * <ul>
+ *   <li>{@link LocalFileStorageService} — disco local ({@code rescatta.storage.provider=local}).</li>
+ *   <li>{@link R2FileStorageService} — Cloudflare R2 ({@code rescatta.storage.provider=r2}).</li>
+ *   <li>{@link CloudinaryFileStorageService} — Cloudinary ({@code rescatta.storage.provider=cloudinary}).</li>
+ * </ul>
+ *
+ * <p>Los controllers y services dependen únicamente de esta interfaz, así que cambiar de
+ * proveedor es solo configuración + variables de entorno.
  */
 public interface FileStorageService {
 
@@ -18,9 +26,34 @@ public interface FileStorageService {
      */
     String store(MultipartFile file, String subfolder);
 
-    /** Guarda varios archivos y devuelve sus URLs públicas, en el mismo orden recibido. */
-    List<String> storeAll(List<MultipartFile> files, String subfolder);
+    /**
+     * Guarda varios archivos y devuelve sus URLs públicas, en el mismo orden recibido.
+     *
+     * <p>Si uno falla, elimina los que ya se habían guardado para no dejar huérfanos.
+     * No todas las implementaciones necesitan sobrescribirlo.
+     */
+    default List<String> storeAll(List<MultipartFile> files, String subfolder) {
+        List<String> urls = new ArrayList<>();
+        try {
+            for (MultipartFile file : files) {
+                urls.add(store(file, subfolder));
+            }
+            return urls;
+        } catch (RuntimeException ex) {
+            urls.forEach(this::deleteQuietly);
+            throw ex;
+        }
+    }
 
     /** Elimina un archivo previamente almacenado, dada su URL pública. */
     void delete(String publicUrl);
+
+    /** Igual que {@link #delete(String)} pero no interrumpe el flujo si el borrado falla. */
+    default void deleteQuietly(String publicUrl) {
+        try {
+            delete(publicUrl);
+        } catch (Exception ignored) {
+            // El borrado no debe romper la operación principal (crear reporte, actualizar logo, etc.).
+        }
+    }
 }

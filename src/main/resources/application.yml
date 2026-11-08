@@ -7,24 +7,45 @@ spring:
     multipart:
       enabled: true
       max-file-size: 10MB      # tamaño máximo por foto
-      max-request-size: 30MB   # suficiente para 5 fotos + campos del formulario
+      max-request-size: 55MB   # 5 fotos de 10MB + campos del formulario
   jackson:
     default-property-inclusion: non_null
     time-zone: America/Lima
 
 server:
-  port: 8081
+  port: ${PORT:8081}
 
-# Carpeta donde se guardan las fotos subidas (reportes y mascotas).
-# Se sirve públicamente bajo /uploads/** (ver WebMvcConfig).
+# Almacenamiento de imágenes.
+# provider=local      -> disco local, solo desarrollo (las imágenes se pierden en la nube).
+# provider=r2         -> Cloudflare R2 (S3-compatible, 10GB free, sin egress).
+# provider=cloudinary -> Cloudinary (free tier sin tarjeta, CDN + transformaciones).
 rescatta:
   storage:
+    provider: ${STORAGE_PROVIDER:local}
     base-path: ./uploads
     public-url-prefix: /uploads
+    # URL pública base para local/r2. En local puede quedar vacía (devuelve /uploads/...).
+    # En R2 debe ser la URL pública del bucket: https://pub-xxxx.r2.dev o tu dominio custom.
+    public-base-url: ${STORAGE_PUBLIC_BASE_URL:}
+    r2:
+      endpoint: ${R2_ENDPOINT:}
+      bucket: ${R2_BUCKET:}
+      access-key: ${R2_ACCESS_KEY:}
+      secret-key: ${R2_SECRET_KEY:}
+      region: ${R2_REGION:auto}
+    cloudinary:
+      cloud-name: ${CLOUDINARY_CLOUD_NAME:}
+      api-key: ${CLOUDINARY_API_KEY:}
+      api-secret: ${CLOUDINARY_API_SECRET:}
+      folder: ${CLOUDINARY_FOLDER:rescatta}
   reports:
     max-photos: 5
   catalog:
     default-search-radius-km: 10
+  superadmin:
+    bootstrap-secret: ${RESCATTA_SUPERADMIN_SECRET:}
+  cors:
+    allowed-origins: ${RESCATTA_CORS_ORIGINS:*}
 
 springdoc:
   swagger-ui:
@@ -53,7 +74,7 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
   sql:
     init:
-      mode: always   # ejecuta data.sql al arrancar (seed de razas, organización y mascotas demo)
+      mode: never   # ejecuta data.sql al arrancar (seed de razas, organización y mascotas demo)
 
 ---
 
@@ -84,3 +105,9 @@ spring:
   sql:
     init:
       mode: never
+
+# En producción el proveedor de storage es obligatorio: no queremos caer
+# silenciosamente en disco local (las imágenes se perderían en Render).
+rescatta:
+  storage:
+    provider: ${STORAGE_PROVIDER:}

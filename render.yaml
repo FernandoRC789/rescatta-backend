@@ -1,0 +1,74 @@
+services:
+  - type: web
+    name: rescatta-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /api-docs
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DB_URL
+        sync: false        # jdbc:mysql://<host>:3306/rescatta?useSSL=true&serverTimezone=America/Lima
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false        # contenido completo del JSON de la cuenta de servicio de Firebase, en una sola línea
+      - key: RESCATTA_SUPERADMIN_SECRET
+        sync: false        # usar una sola vez para crear el primer SUPERADMIN, luego rotar/borrar
+      - key: RESCATTA_CORS_ORIGINS
+        value: "*"         # reemplázalo por el dominio real del panel web una vez desplegado, ej: https://admin.rescatta.app
+      - key: PORT
+        value: 8081
+
+      # ============================================================
+      # ALMACENAMIENTO DE IMÁGENES
+      # ============================================================
+      # Render Free NO soporta discos persistentes: el filesystem del contenedor
+      # es efímero y las fotos se borran en cada deploy/reinicio. Por eso usamos
+      # un storage de objetos externo.
+      #
+      # Elige UNO de los dos proveedores y configura sus variables:
+      #   STORAGE_PROVIDER=cloudinary  (recomendado para empezar: free sin tarjeta)
+      #   STORAGE_PROVIDER=r2          (Cloudflare R2: 10GB free, sin egress)
+      - key: STORAGE_PROVIDER
+        sync: false        # cloudinary | r2
+
+      # --- Opción A: Cloudinary ---
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_FOLDER
+        value: rescatta
+
+      # --- Opción B: Cloudflare R2 ---
+      - key: STORAGE_PUBLIC_BASE_URL
+        sync: false        # https://pub-xxxxxxxx.r2.dev o tu dominio custom
+      - key: R2_ENDPOINT
+        sync: false        # https://<account-id>.r2.cloudflarestorage.com
+      - key: R2_BUCKET
+        sync: false
+      - key: R2_ACCESS_KEY
+        sync: false
+      - key: R2_SECRET_KEY
+        sync: false
+      - key: R2_REGION
+        value: auto
+
+# NOTA IMPORTANTE SOBRE LA BASE DE DATOS:
+# Render no ofrece MySQL administrado gratuito (solo PostgreSQL). Este backend usa
+# mysql-connector-j, así que para desplegar en Render necesitas un MySQL externo
+# (por ejemplo Aiven, TiDB Cloud Serverless o Clever Cloud tienen planes gratuitos
+# de MySQL) y pegar su URL/usuario/password en DB_URL / DB_USERNAME / DB_PASSWORD.
+# Alternativa: migrar a PostgreSQL (Neon/Supabase free) cambiando la dependencia
+# mysql-connector-j por postgresql en el pom.xml y el dialect en application.yml a
+# org.hibernate.dialect.PostgreSQLDialect — el resto del código no cambia.
+#
+# IMÁGENES:
+# No se declara `disk:` porque Render Free no lo soporta. Las fotos se guardan en
+# Cloudinary o Cloudflare R2 según STORAGE_PROVIDER.

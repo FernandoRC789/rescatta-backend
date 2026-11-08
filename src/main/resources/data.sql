@@ -886,7 +886,7 @@ SELECT
 
     'HEMBRA',
 
-    'SENIOR',
+    'ANCIANO',
 
     '7 años',
 

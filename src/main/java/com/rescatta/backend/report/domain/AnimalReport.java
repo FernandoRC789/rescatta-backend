@@ -1,6 +1,7 @@
 package com.rescatta.backend.report.domain;
 
 import com.rescatta.backend.breed.domain.Breed;
+import com.rescatta.backend.organization.domain.Organization;
 import com.rescatta.backend.shared.domain.enums.AgeGroup;
 import com.rescatta.backend.shared.domain.enums.ReportCondition;
 import com.rescatta.backend.shared.domain.enums.ReportStatus;
@@ -77,6 +78,24 @@ public class AnimalReport {
     @Column(name = "reporter_can_stay", nullable = false)
     @Builder.Default
     private boolean reporterCanStay = false;
+
+    /** Veterinaria/refugio que tomó el caso — se asigna al aprobar el reporte. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
+
+    /** UID de Firebase del administrador que aprobó/rechazó/actualizó el estado. */
+    @Column(name = "reviewed_by_uid", length = 128)
+    private String reviewedByUid;
+
+    private Instant reviewedAt;
+
+    @Column(name = "rejection_reason", length = 500)
+    private String rejectionReason;
+
+    /** Notas internas del refugio/veterinaria — no visibles para el ciudadano. */
+    @Column(name = "admin_notes", length = 1000)
+    private String adminNotes;
 
     @OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default

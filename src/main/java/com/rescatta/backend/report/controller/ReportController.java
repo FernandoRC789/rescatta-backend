@@ -83,4 +83,11 @@ public class ReportController {
         String reporterUid = currentUserProvider.requireCurrentUserUid();
         return ApiResponse.ok(reportService.countByReporter(reporterUid));
     }
+
+    @GetMapping("/mine")
+    @Operation(summary = "Lista los reportes hechos por el usuario autenticado, con su estado actual")
+    public ApiResponse<PageResponse<ReportSummaryResponse>> myReports(Pageable pageable) {
+        String reporterUid = currentUserProvider.requireCurrentUserUid();
+        return ApiResponse.ok(reportService.listMine(reporterUid, pageable));
+    }
 }
